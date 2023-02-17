@@ -3,7 +3,7 @@
 With the new release of HCP 0.12 
 https://www.hashicorp.com/blog/boundary-0-12-introduces-multi-hop-sessions-and-ssh-certificate-injection
 
-![title](./images/homelab.png)
+![title](./images/labhome.png)
 
 ## Steps Build Boundary Docker Worker
 Create a root folder for your HCP Boundary Docker, inside that folder create the following docker-compose.yml and volume file structure.
