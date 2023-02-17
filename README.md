@@ -95,3 +95,61 @@ boundary workers create worker-led -worker-generated-auth-token=$WORKER_TOKEN
 ```
 
 
+## Lets create an org and project
+
+So to connect a target you first need an ORG and Project
+
+```
+boundary scopes create -name myorg
+```
+
+Create a project within the org
+
+```
+Scope information:
+  Created Time:        Thu, 16 Feb 2023 23:32:20 EST
+  ID:                  o_T05IfPhff0
+  Name:                myorg
+  Updated Time:        Thu, 16 Feb 2023 23:32:20 EST
+  Version:             1
+
+...
+
+```
+
+Next create a project within the org using the -scope-id   
+
+```
+boundary scopes create -scope-id o_T05IfPhff0 -name myproject
+```
+
+```
+Scope information:
+  Created Time:        Thu, 16 Feb 2023 23:32:42 EST
+  ID:                  p_ory6Wc9AtM
+  Name:                myproject
+  Updated Time:        Thu, 16 Feb 2023 23:32:42 EST
+  Version:             1
+
+  Scope (parent):
+    ID:                o_T05IfPhff0
+    Name:              myorg
+    Parent Scope ID:   global
+    Type:              org
+...
+
+```
+
+## Now Create a target
+Now lets create a target within our project.. for example this is going to be an linux server with the following IP 
+
+
+```
+boundary targets create tcp \
+   -name="my-first-target" \
+   -description="my first target" \
+   -address="192.168.86.137" \
+   -default-port=22 \
+   -scope-id="p_ory6Wc9AtM" \
+   -egress-worker-filter='"downstream" in "/tags/type"'
+```
