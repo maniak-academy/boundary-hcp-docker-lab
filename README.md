@@ -9,15 +9,14 @@ https://www.hashicorp.com/blog/boundary-0-12-introduces-multi-hop-sessions-and-s
 Create a root folder for your HCP Boundary Docker, inside that folder create the following docker-compose.yml and volume file structure.
 
 
-```
-touch docker-compose.yml
-mkdir -p volume/{config,file,logs}
-```
+## Step 1
+Create an HCP Boundary Cloud Account
 
-Populate the boundary hcp config config.hcl. You will need to log into your HCP Boundary cluster and select one of the 3 HCP workers that deployed. Take the HCP Boundary Worker 
+1. Once HCP Boundary has been deployed, log into the Admin Portal and click on WORKERS, grab one of the IP address from one of the 3 workers deployed
+2. Create the configuration file and input that IP Address/FQDN:9202 
 
 ```
-cat > volumes/config/config.hcl << EOF
+cat > config/boundary/config/config.hcl << EOF
 disable_mlock = true
 
 listener "tcp" {
@@ -26,130 +25,60 @@ listener "tcp" {
 }
 
 worker {
-  initial_upstreams = ["asdfasdfasdfasdf.proxy.boundary.hashicorp.cloud:9202"]
+  initial_upstreams = ["777777-4dd4-20df-521c-54ae2f867e71.proxy.boundary.hashicorp.cloud:9202"]
   auth_storage_path = "/boundary-hcp-worker/file/worker2"
   tags {
-    type = ["worker2", "downstream"]
+    type = ["worker3", "homelab"]
   }
 }
 
 EOF
 ```
+## Step 2
 
-Populate the docker-compose.yml:
-
-```
-cat > docker-compose.yml << EOF
-version: '2'
-services:
-  boundary-hcp-worker:
-    image: hashicorp/boundary-worker-hcp
-    container_name: boundary-hcp-worker
-    ports:
-      - "9203:9203"
-      - "9202:9202"
-    restart: always
-    volumes:
-      - ./volume/config:/boundary-hcp-worker/config
-      - ./volume/logs:/boundary-hcp-worker/logs
-      - ./volume/file:/boundary-hcp-worker/file
-    cap_add:
-      - IPC_LOCK
-    entrypoint: boundary-worker server -config=/boundary-hcp-worker/config/config.hcl
-EOF
-```
-
-Start your Docker
-
+1. Start your environment.
+ 
 ```
 docker compose up -d
 ```
 
-
-When the docker is online, grab the worker token.
+2. When the docker is online, grab the worker token.
 
 ![title](./images/dockerhcp.png)
 
-Next, in your CLI export the token
+3. Next, in your CLI export the token
 
 ```
-export WORKER_TOKEN=GzusqckarbczHoLaRhKPufF84F2JsSUxiYkXgkY71uGHNH7qvLKFbuKQBty14DhXAiccjc8ACuxLkMMzCMr1uCsjh5f9CH
+export WORKER_TOKEN=<insert>
 ```
 
-log into boundary using the cli, set an export for boundary_addr to your own HCP.
+4. Log into boundary using the cli, set an export for boundary_addr to your own HCP.
 
 ```
-export BOUNDARY_ADDR=c56-6e5ee57a1aec.boundary.hashicorp.cloud
+export BOUNDARY_ADDR=<insert>
 ```
 
-Authenticate to boundary with your admin username and password
+5. Authenticate to boundary with your admin username and password
 
 ```
 boundary authenticate 
 ```
 
-Execute the following command to create a boundary worker in HCP Boundary
+6. Execute the following command to create a boundary worker in HCP Boundary
 
 ```
 boundary workers create worker-led -worker-generated-auth-token=$WORKER_TOKEN
 ```
 
+Now if you log into your HCP Boundary Worker section you will see ur worker get created.
 
-## Lets create an org and project
+## Deploy the Setup Script
+Since we are deploying this locally on your machine or pc we will need your IP address. So for now edit the deploy.sh and add your IP address of your machine. 
 
-So to connect a target you first need an ORG and Project
-
-```
-boundary scopes create -name myorg
-```
-
-Create a project within the org
+1. Edit the deploy.sh export HOSTIP=<insert your pc ip>
+2. ``` chmod +x ./deploy.sh ```
+3. Execute the command to do the configuraiton.
 
 ```
-Scope information:
-  Created Time:        Thu, 16 Feb 2023 23:32:20 EST
-  ID:                  o_T05IfPhff0
-  Name:                myorg
-  Updated Time:        Thu, 16 Feb 2023 23:32:20 EST
-  Version:             1
-
-...
-
-```
-
-Next create a project within the org using the -scope-id   
-
-```
-boundary scopes create -scope-id o_T05IfPhff0 -name myproject
-```
-
-```
-Scope information:
-  Created Time:        Thu, 16 Feb 2023 23:32:42 EST
-  ID:                  p_ory6Wc9AtM
-  Name:                myproject
-  Updated Time:        Thu, 16 Feb 2023 23:32:42 EST
-  Version:             1
-
-  Scope (parent):
-    ID:                o_T05IfPhff0
-    Name:              myorg
-    Parent Scope ID:   global
-    Type:              org
-...
-
-```
-
-## Now Create a target
-Now lets create a target within our project.. for example this is going to be an linux server with the following IP 
-
-
-```
-boundary targets create tcp \
-   -name="my-first-target" \
-   -description="my first target" \
-   -address="192.168.86.137" \
-   -default-port=22 \
-   -scope-id="p_ory6Wc9AtM" \
-   -egress-worker-filter='"downstream" in "/tags/type"'
+./deploy.sh
 ```

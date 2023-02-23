@@ -1,0 +1,51 @@
+version: '2'
+services:
+  boundary-hcp-worker:
+    image: hashicorp/boundary-worker-hcp
+    container_name: boundary-hcp-worker
+    ports:
+      - "9203:9203"
+      - "9202:9202"
+    restart: always
+    volumes:
+      - ./config/boundary/config:/boundary-hcp-worker/config
+      - ./config/boundary/logs:/boundary-hcp-worker/logs
+      - ./config/boundary/file:/boundary-hcp-worker/file
+    cap_add:
+      - IPC_LOCK
+    entrypoint: boundary-worker server -config=/boundary-hcp-worker/config/config.hcl
+
+  vault:
+    image: hashicorp/vault
+    container_name: vault
+    ports:
+      - "8200:8200"
+    restart: always
+    volumes:
+      - ./config/vault/logs:/vault/logs
+      - ./config/vault/file:/vault/file
+      - ./config/vault/config:/vault/config
+    cap_add:
+      - IPC_LOCK
+    entrypoint: vault server -config=/vault/config/vault.hcl
+
+
+  openssh-server:
+    image: lscr.io/linuxserver/openssh-server:latest
+    container_name: openssh-win-server
+    hostname: openssh-win-server
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - PUBLIC_KEY_FILE=/keys/openssh-key.pub
+      - SUDO_ACCESS=false
+      - USER_NAME=admin
+    volumes:
+      - ./config/openssh/:/keys
+    ports:
+      - 2222:2222
+    restart: unless-stopped
+
+
+    
