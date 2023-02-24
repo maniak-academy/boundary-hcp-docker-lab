@@ -9,6 +9,10 @@
 crash.log
 init.txt
 scope.json
+/config/boundary/file/*
+/config/boundary/logs/*
+/config/vault/file/*
+/config/vault/logs/*
 
 # Ignore any .tfvars files that are generated automatically for each Terraform run. Most
 # .tfvars files are managed as part of configuration and so should be included in
