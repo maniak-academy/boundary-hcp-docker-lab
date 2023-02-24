@@ -9,8 +9,8 @@
 crash.log
 init.txt
 scope.json
-./config/boundary/file/*
-./config/boundary/logs/*
+/config/boundary/file/*
+/config/boundary/logs/*
 /config/vault/file/*
 /config/vault/logs/*
 
