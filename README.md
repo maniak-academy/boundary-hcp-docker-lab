@@ -82,3 +82,17 @@ Since we are deploying this locally on your machine or pc we will need your IP a
 ```
 ./deploy.sh
 ```
+
+
+# Test it out 
+```
+export BOUNDARY_ADDR=<insert>
+boundary authenticate 
+```
+
+Execute SSH injection command
+
+```
+boundary connect ssh -target-name="Linux" -target-scope-name="Docker Servers"
+```
+
