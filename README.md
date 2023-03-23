@@ -77,6 +77,7 @@ Since we are deploying this locally on your machine or pc we will need your IP a
 
 1. Edit the deploy.sh export HOSTIP=<insert your pc ip>
 2. ``` chmod +x ./deploy.sh ```
+3. ``` chmod +x ./start.sh ```
 3. Execute the command to do the configuraiton.
 
 ```

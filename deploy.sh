@@ -5,7 +5,7 @@ export HOSTIP=192.168.86.250
 
 ## Setuo K8s using Kind server 
 
-cat > ./config/kind/cluster.yaml << EOF
+cat > cluster.yaml << EOF
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 networking:
@@ -16,10 +16,10 @@ nodes:
   image: kindest/node:v1.23.0
 EOF
 
-kind create cluster --config=./config/kind/cluster.yaml
 
 
-cat > ./config/kind/vault-cluster-role.yaml << EOF
+
+cat > vault-cluster-role.yaml << EOF
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -60,7 +60,7 @@ EOF
 
 
 kubectl create namespace vault
-kubectl apply -f ./config/kind/vault-cluster-role.yaml
+kubectl apply -f vault-cluster-role.yaml
 
 ### DEPLOY VAULT 
 
