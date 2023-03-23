@@ -104,3 +104,7 @@ Execute Kube connection
 boundary connect kube -target-name="K8s" -target-scope-name="Docker K8s"
 ```
 
+
+## How to destroy your environment
+To clean up your environment run the following script
+
