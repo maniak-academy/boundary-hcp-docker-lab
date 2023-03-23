@@ -58,20 +58,6 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  # vyos-router:
-  #   image: vyos/vyos-build
-  #   container_name: vyos-router
-  #   restart: unless-stopped
-  #   privileged: true
-  #   stdin_open: true
-  #   tty: true
-  #   volumes:
-  #     - ./config/router/:/config
-  #     - ./config/router/:/keys
-  #   environment:
-  #     - SSH_KEY=/keys/openssh-key.pub
-
-
 volumes:
   pgdata:
 

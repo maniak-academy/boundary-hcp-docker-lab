@@ -1,13 +1,12 @@
 # Setup Hashicorp HCP Boundary Docker
 
-With the new release of HCP 0.12 
+With the new release of HCP 0.12.1
 https://www.hashicorp.com/blog/boundary-0-12-introduces-multi-hop-sessions-and-ssh-certificate-injection
 
-![title](./images/dockerlab.png)
+![title](./images/dockerlab_v1.png)
 
-## Steps Build Boundary Docker Worker
+# Steps Build Boundary Docker Worker
 Create a root folder for your HCP Boundary Docker, inside that folder create the following docker-compose.yml and volume file structure.
-
 
 ## Step 1
 Create an HCP Boundary Cloud Account
@@ -34,7 +33,7 @@ worker {
 
 EOF
 ```
-## Step 2
+## Step 2: Deploy the docker environment. 
 
 1. Start your environment.
  
@@ -72,19 +71,22 @@ boundary workers create worker-led -worker-generated-auth-token=$WORKER_TOKEN
 
 Now if you log into your HCP Boundary Worker section you will see ur worker get created.
 
-## Deploy the Setup Script
+
+## Step 3: Deploy the Setup Script
 Since we are deploying this locally on your machine or pc we will need your IP address. So for now edit the deploy.sh and add your IP address of your machine. 
 
 1. Edit the deploy.sh export HOSTIP=<insert your pc ip>
 2. ``` chmod +x ./deploy.sh ```
+3. ``` chmod +x ./start.sh ```
 3. Execute the command to do the configuraiton.
 
 ```
-./deploy.sh
+./start.sh
 ```
 
 
-# Test it out 
+## Step 5: Test it out
+You should already be authenticate, but you can authenticate again.  
 ```
 export BOUNDARY_ADDR=<insert>
 boundary authenticate 
@@ -96,3 +98,21 @@ Execute SSH injection command
 boundary connect ssh -target-name="Linux" -target-scope-name="Docker Servers"
 ```
 
+
+Execute Kube connection 
+
+```
+boundary connect kube -target-name="K8s" -target-scope-name="Docker K8s"
+```
+
+
+Postgres Brokering 
+
+```
+boundary connect postgres -target-name="Postgres DB" -target-scope-name="Docker DB" --dbname database
+```
+
+## How to destroy your environment
+To clean up your environment run the following script
+1. ``` chmod +x ./destroy.sh ```
+3. Execute ``` ./destory.sh  ```
