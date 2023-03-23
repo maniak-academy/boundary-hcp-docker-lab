@@ -317,11 +317,15 @@ export LINUX_SSH_TARGET=$(boundary targets create ssh \
    -egress-worker-filter='"dockerlab" in "/tags/type"' \
    -format=json | jq -r '.item.id')
 
+
+export K8S_TARGET_PORT=$(kubectl config view -o jsonpath='{.clusters[].cluster.server}' | cut -d ":" -f 3)
+
+
 export K8S_TARGET=$(boundary targets create tcp \
-   -name="K8S TCP" \
+   -name="K8s" \
    -description="K8S server with tcp" \
    -address=$HOSTIP \
-   -default-port="59103" \
+   -default-port=$K8S_TARGET_PORT \
    -scope-id=$K8S_PROJECT_ID \
    -egress-worker-filter='"dockerlab" in "/tags/type"' \
    -format=json | jq -r '.item.id')
@@ -380,4 +384,14 @@ boundary targets add-credential-sources \
   -id=$DB_TARGET \
   -application-credential-source=$DB_CRED_LIB_ID
 
-kubectl config view -o jsonpath="{.clusters[?(@.name == \"$(kubectl config current-context)\")].cluster.server}"
+
+echo "Try the following commands now"
+echo "Execute SSH injection command"
+echo "boundary connect ssh -target-name=\"Linux\" -target-scope-name=\"Docker Servers\""
+echo " Execute Kube connection "
+echo "boundary connect kube -target-name=\"K8s\" -target-scope-name=\"Docker K8s\""
+
+
+
+
+

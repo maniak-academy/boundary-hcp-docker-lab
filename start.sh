@@ -19,4 +19,4 @@ EOF
 kind create cluster --config=cluster.yaml
 
 
-./docker.sh
+./deploy.sh

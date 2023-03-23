@@ -81,7 +81,7 @@ Since we are deploying this locally on your machine or pc we will need your IP a
 3. Execute the command to do the configuraiton.
 
 ```
-./deploy.sh
+./start.sh
 ```
 
 
@@ -95,5 +95,12 @@ Execute SSH injection command
 
 ```
 boundary connect ssh -target-name="Linux" -target-scope-name="Docker Servers"
+```
+
+
+Execute Kube connection 
+
+```
+boundary connect kube -target-name="K8s" -target-scope-name="Docker K8s"
 ```
 
