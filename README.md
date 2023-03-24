@@ -5,6 +5,10 @@ https://www.hashicorp.com/blog/boundary-0-12-introduces-multi-hop-sessions-and-s
 
 ![title](./images/dockerlab_v1.png)
 
+# Prerequists 
+* Install Kind on your machine https://kind.sigs.k8s.io/docs/user/quick-start/
+* Install Docker 
+
 # Steps Build Boundary Docker Worker
 Create a root folder for your HCP Boundary Docker, inside that folder create the following docker-compose.yml and volume file structure.
 
