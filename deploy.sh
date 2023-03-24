@@ -187,7 +187,7 @@ path "kubernetes/creds/auto-managed-sa-and-role" {
   capabilities = ["update"]
 }
 
-path "k8-secret/data/k8s-cluster" {
+path "k8s-secret/data/k8s-cluster" {
  capabilities = ["read"]
 }' | vault policy write k8s-policy -
 
@@ -391,7 +391,7 @@ echo "boundary connect ssh -target-name=\"Linux\" -target-scope-name=\"Docker Se
 echo "Execute Kube connection"
 echo "boundary connect kube -target-name=\"K8s\" -target-scope-name=\"Docker K8s\""
 echo "Execute DB connection"
-echo "boundary connect -target-name=\"Postgres DB\" -target-scope-name=\"Docker DB\" --dbname database"
+echo "boundary connect postgres -target-name=\"Postgres DB\" -target-scope-name=\"Docker DB\" --dbname database"
 
 
 

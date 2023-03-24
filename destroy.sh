@@ -6,6 +6,15 @@ export HOSTIP=192.168.86.250
 docker-compose down
 docker-compose down --volumes
 
+export ORG_ID_DEL=$(boundary scopes list -format=json | jq -r '.items[] | select(.name == "Docker Lab") | .id')
+export WORKER_DEL=$(boundary workers list -format=json | jq -r '.items[] | select(.type == "pki") | .id')
+
+
+boundary scopes delete -id=$ORG_ID_DEL
+
+
+boundary workers delete -id=$WORKER_DEL
+
 kind delete cluster
 
 rm -rf cluster.yaml
