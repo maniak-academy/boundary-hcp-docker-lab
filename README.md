@@ -76,8 +76,11 @@ Now if you log into your HCP Boundary Worker section you will see ur worker get 
 Since we are deploying this locally on your machine or pc we will need your IP address. So for now edit the deploy.sh and add your IP address of your machine. 
 
 1. Edit the deploy.sh export HOSTIP=<insert your pc ip>
-2. ``` chmod +x ./deploy.sh ```
-3. ``` chmod +x ./start.sh ```
+2. 
+
+``` 
+chmod +x ./start.sh 
+```
 3. Execute the command to do the configuraiton.
 
 ```
@@ -102,7 +105,7 @@ boundary connect ssh -target-name="Linux" -target-scope-name="Docker Servers"
 Execute Kube connection 
 
 ```
-boundary connect kube -target-name="K8s" -target-scope-name="Docker K8s"
+boundary connect kube -target-name="K8s" -target-scope-name="Docker K8s" -- get pods -A
 ```
 
 

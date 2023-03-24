@@ -385,14 +385,6 @@ boundary targets add-credential-sources \
   -application-credential-source=$DB_CRED_LIB_ID
 
 
-echo "Try the following commands now"
-echo "Execute SSH injection command"
-echo "boundary connect ssh -target-name=\"Linux\" -target-scope-name=\"Docker Servers\""
-echo "Execute Kube connection"
-echo "boundary connect kube -target-name=\"K8s\" -target-scope-name=\"Docker K8s\""
-echo "Execute DB connection"
-echo "boundary connect postgres -target-name=\"Postgres DB\" -target-scope-name=\"Docker DB\" --dbname database"
-
 
 
 
