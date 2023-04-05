@@ -42,7 +42,7 @@ EOF
 1. Start your environment.
  
 ```
-docker compose up -d
+docker-compose up -d
 ```
 
 2. When the docker is online, grab the worker token.
