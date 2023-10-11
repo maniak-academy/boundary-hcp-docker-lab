@@ -1,9 +1,9 @@
 #!/bin/bash
 
 set -v
-export HOSTIP=192.168.86.250
+export HOSTIP=172.16.10.118
 
-## Setuo K8s using Kind server 
+## Setup K8s using Kind server 
 
 cat > cluster.yaml << EOF
 kind: Cluster
@@ -191,6 +191,7 @@ path "k8s-secret/data/k8s-cluster" {
  capabilities = ["read"]
 }' | vault policy write k8s-policy -
 
+export VAULT_ADDR=http://${HOSTIP}:8200
 
 export K8S_CRED_STORE_TOKEN=$(vault token create \
     -no-default-policy=true \
@@ -219,7 +220,7 @@ export DB_CRED_STORE_TOKEN=$(vault token create \
     -renewable=true \
     -format=json | jq -r .auth.client_token)
 
-### DEPLOY BOUNDARY ORGS AND PROJECTS
+# ### DEPLOY BOUNDARY ORGS AND PROJECTS
 
 
 export ORG_ID=$(boundary scopes create \
@@ -245,7 +246,7 @@ export K8S_PROJECT_ID=$(boundary scopes create \
  -description="K8s Infra" \
  -format=json | jq -r '.item.id')
 
-### DEPLOY CREDENTIAL STORE AND LIBRARY
+# ### DEPLOY CREDENTIAL STORE AND LIBRARY
 
 
 export SERVER_CRED_STORE_ID=$(boundary credential-stores create vault \
@@ -265,7 +266,7 @@ export DB_CRED_STORE_ID=$(boundary credential-stores create vault \
  -format=json | jq -r '.item.id')
 
 
-export SERVER_CRED_LIB_ID=$(boundary credential-libraries create vault \
+export SERVER_CRED_LIB_ID=$(boundary credential-libraries create vault-generic \
  -name="Server Cred Library" \
  -credential-store-id $SERVER_CRED_STORE_ID \
  -credential-type ssh_private_key \
@@ -281,7 +282,7 @@ export K8S_CRED_STORE_ID=$(boundary credential-stores create vault \
  -format=json | jq -r '.item.id')
 
 
-export K8S_CRED_LIB_ID=$(boundary credential-libraries create vault \
+export K8S_CRED_LIB_ID=$(boundary credential-libraries create vault-generic  \
  -name="K8S Cred Library" \
  -credential-store-id $K8S_CRED_STORE_ID \
  -vault-path "kubernetes/creds/auto-managed-sa-and-role" \
@@ -290,14 +291,14 @@ export K8S_CRED_LIB_ID=$(boundary credential-libraries create vault \
  -format=json | jq -r '.item.id')
 
 
-export K8S_SECRET_CRED_LIB_ID=$(boundary credential-libraries create vault \
+export K8S_SECRET_CRED_LIB_ID=$(boundary credential-libraries create vault-generic \
  -name="K8S Secret Cred Library" \
  -credential-store-id $K8S_CRED_STORE_ID \
  -vault-path "k8s-secret/data/k8s-cluster" \
  -vault-http-method=GET \
  -format=json | jq -r '.item.id')
 
-### DEPLOY TARGETS
+# ### DEPLOY TARGETS
 
 export LINUX_TCP_TARGET=$(boundary targets create tcp \
    -name="Linux TCP" \
@@ -364,7 +365,7 @@ vault write database/roles/dba \
     max_ttl="24h"
 
 
-export DB_CRED_LIB_ID=$(boundary credential-libraries create vault \
+export DB_CRED_LIB_ID=$(boundary credential-libraries create vault-generic \
     -name="DB Cred Library" \
     -credential-store-id $DB_CRED_STORE_ID \
     -credential-type username_password \

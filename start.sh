@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -v
-export HOSTIP=192.168.86.250
+export HOSTIP=172.16.10.118
 
 ## Setuo K8s using Kind server 
 
@@ -19,4 +19,4 @@ EOF
 kind create cluster --config=cluster.yaml
 
 
-./deploy.sh
+ ./deploy.sh

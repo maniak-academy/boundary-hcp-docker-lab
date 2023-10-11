@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   boundary-hcp-worker:
-    image: hashicorp/boundary-worker-hcp
+    image: hashicorp/boundary-enterprise
     container_name: boundary-hcp-worker
     ports:
       - "9203:9203"
@@ -11,9 +11,10 @@ services:
       - ./config/boundary/config:/boundary-hcp-worker/config
       - ./config/boundary/logs:/boundary-hcp-worker/logs
       - ./config/boundary/file:/boundary-hcp-worker/file
+      - ./config/boundary/file:/boundary-hcp-worker/recording
     cap_add:
       - IPC_LOCK
-    entrypoint: boundary-worker server -config=/boundary-hcp-worker/config/config.hcl
+    entrypoint: boundary server -config=/boundary-hcp-worker/config/config.hcl
 
   vault:
     image: hashicorp/vault

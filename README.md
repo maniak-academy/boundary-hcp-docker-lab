@@ -1,7 +1,9 @@
 # Setup Hashicorp HCP Boundary Docker
 
-With the new release of HCP 0.12.1
-https://www.hashicorp.com/blog/boundary-0-12-introduces-multi-hop-sessions-and-ssh-certificate-injection
+* Update with version 0.14.0
+* Adding local session recording
+* Terminal Added
+
 
 ![title](./images/dockerlab_v1.png)
 
@@ -15,7 +17,7 @@ Create a root folder for your HCP Boundary Docker, inside that folder create the
 ## Step 1
 Create an HCP Boundary Cloud Account
 
-1. Once HCP Boundary has been deployed, log into the Admin Portal and click on WORKERS, grab one of the IP address from one of the 3 workers deployed
+1. Once HCP Boundary has been deployed, log into the Admin Portal and click on WORKERS, grab one of the IP address from one of the 2 workers deployed
 2. Create the configuration file and input that IP Address/FQDN:9202 
 
 ```
@@ -28,15 +30,17 @@ listener "tcp" {
 }
 
 worker {
-  initial_upstreams = ["777777-4dd4-20df-521c-54ae2f867e71.proxy.boundary.hashicorp.cloud:9202"]
+  initial_upstreams = ["r4444-4dd4-20df-521c-54ae2f867e71.proxy.boundary.hashicorp.cloud:9202"]
   auth_storage_path = "/boundary-hcp-worker/file/worker2"
+  #recording_storage_path = "/boundary-hcp-worker/recording/"
   tags {
-    type = ["worker3", "homelab"]
+    type = ["dockerlab"]
   }
 }
 
 EOF
 ```
+
 ## Step 2: Deploy the docker environment. 
 
 1. Start your environment.

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -v
-export HOSTIP=192.168.86.250
+export HOSTIP=172.16.10.118
 
 docker-compose down
 docker-compose down --volumes
