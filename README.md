@@ -1,6 +1,6 @@
 # Setup Hashicorp HCP Boundary Docker
 
-* Update with version 0.14.0
+* Update with version 0.15.0
 * Adding local session recording
 * Terminal Added
 
